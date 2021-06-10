@@ -1,25 +1,97 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import ReactDOM from "react-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(4),
+    margin: "auto",
+    marginBottom:20,
+    maxWidth: 800,
+    borderRadius: 30,
+    border: 1
+  }
+}));
+
 
 function App() {
+  const [place, setPlace] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filterPlace, setFilterPlace] = useState([]);
+
+//Get API  
+  useEffect(() => {
+    axios
+      .get("http://localhost:9000/trips")
+      .then((res) => {
+        setPlace(res.data);
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, []);
+
+//Search filter
+  useEffect(() => {
+    setFilterPlace(
+      place.filter((place) =>
+        place.title.includes(search) || place.tags.includes(search)
+      )
+    );
+  }, [search, place]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <Container maxWidth="sm">
+      <h1>Trip On The Way!</h1>
+      <form>
+        <TextField id="standard-basic" fullWidth label="Search" onChange = {(e) => setSearch(e.target.value)}/>
+      </form>
+      <br/>
+    </Container>
+      {filterPlace.map((place,id) => (
+      <PlaceDetail key={id} {...place} />
+      ))}
     </div>
   );
 }
+
+const PlaceDetail = (props) => {
+  const {title, description, photos, tags} = props;
+  const listTags = tags.map((tags) => 
+    <li>{tags}</li>
+  );
+  const classes = useStyles();
+  
+  return ( 
+    <Paper className = {classes.paper}>
+    <Container fixed>
+      <Typography gutterBottom variant="h5">
+        {title}
+      </Typography>
+      <Typography variant="body2" gutterBottom>
+        <ins>หมวดหมู่</ins><ul>{listTags}</ul>
+      </Typography>
+      <Typography variant="body2" color="textSecondary">
+        {description}
+      </Typography>
+      <p>
+        <img src={photos[0]} alt="" style = {{width: "350px", height: "200px" }}></img>
+        <img src={photos[1]} alt="" style = {{width: "350px", height: "200px" }}></img>
+        <img src={photos[2]} alt="" style = {{width: "350px", height: "200px" }}></img>
+        <img src={photos[3]} alt="" style = {{width: "350px", height: "200px" }}></img>
+      </p>
+    </Container>
+    </Paper>
+  );
+};
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
 
 export default App;
