@@ -64,9 +64,6 @@ function App() {
 
 const PlaceDetail = (props) => {
   const {title, description, photos, tags} = props;
-  const listTags = tags.map((tags) => 
-    <li>{tags}</li>
-  );
   const classes = useStyles();
   
   return ( 
@@ -76,15 +73,18 @@ const PlaceDetail = (props) => {
         {title}
       </Typography>
       <Typography variant="body2" gutterBottom>
-        <ins>หมวดหมู่</ins><ul>{listTags}</ul>
+        <ins>หมวดหมู่</ins>
+        {tags.map((data) => (
+          <li>{data}</li>
+        ))}
       </Typography>
       <Typography variant="body2" color="textSecondary">
         {description}
       </Typography>
       <p>
-      {photos.map((photos) => (
-        <img src={photos} alt="" style = {{width: "350px", height: "200px" }}></img>
-      ))}
+        {photos.map((photos) => (
+          <img src={photos} alt="" style = {{width: "350px", height: "200px" }}></img>
+        ))}
       </p>
     </Container>
     </Paper>
