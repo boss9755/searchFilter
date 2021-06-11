@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(4),
@@ -81,10 +82,9 @@ const PlaceDetail = (props) => {
         {description}
       </Typography>
       <p>
-        <img src={photos[0]} alt="" style = {{width: "350px", height: "200px" }}></img>
-        <img src={photos[1]} alt="" style = {{width: "350px", height: "200px" }}></img>
-        <img src={photos[2]} alt="" style = {{width: "350px", height: "200px" }}></img>
-        <img src={photos[3]} alt="" style = {{width: "350px", height: "200px" }}></img>
+      {photos.map((photos) => (
+        <img src={photos} alt="" style = {{width: "350px", height: "200px" }}></img>
+      ))}
       </p>
     </Container>
     </Paper>
