@@ -21,37 +21,47 @@ const useStyles = makeStyles((theme) => ({
 
 
 function App() {
-  const [place, setPlace] = useState([]);
+  //const [place, setPlace] = useState([]);
   const [search, setSearch] = useState("");
   const [filterPlace, setFilterPlace] = useState([]);
 
 //Get API  
-  useEffect(() => {
+  /*useEffect(() => {
     axios
-      .get("http://localhost:9000/trips")
+      .get(`http://localhost:9000/trips`)
       .then((res) => {
         setPlace(res.data);
       })
       .catch((err) => {
         console.log(err)
       })
-  }, []);
-
-//Search filter
+  }, []);*/
   useEffect(() => {
+    axios
+      .get(`http://localhost:9000/trips?q=${search}`)
+      .then((res) => {
+        setFilterPlace(res.data);
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [search]);
+  
+//Search filter
+  /*useEffect(() => {
     setFilterPlace(
       place.filter((place) =>
         place.title.includes(search) || place.tags.includes(search)
       )
     );
-  }, [search, place]);
+  }, [search,place]);*/
 
   return (
     <div>
     <Container maxWidth="sm">
       <h1>Trip On The Way!</h1>
       <form>
-        <TextField id="standard-basic" fullWidth label="Search" onChange = {(e) => setSearch(e.target.value)}/>
+        <TextField id="standard-basic" onChange={(e) => setSearch(e.target.value)} fullWidth label=""/>
       </form>
       <br/>
     </Container>
